@@ -32,7 +32,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ env.SHARED_REPOSITORY }}
-          token: ${{ secrets.SHARED_REPO_READ_TOKEN }}
           path: _shared
           ref: ${{ github.event.inputs.shared_ref || 'main' }}
           fetch-depth: 1
