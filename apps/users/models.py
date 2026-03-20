@@ -104,6 +104,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 'users'
 
+
 class RefreshToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=255)

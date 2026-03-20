@@ -83,9 +83,9 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
-            "NAME": os.environ.get("DB_NAME_AUTH", os.environ.get("DB_NAME", "stagelog_auth")),
-            "USER": os.environ.get("DB_USER_AUTH", os.environ.get("DB_USER", "")),
-            "PASSWORD": os.environ.get("DB_PASSWORD_AUTH", os.environ.get("DB_PASSWORD", "")),
+            "NAME": os.environ["DB_NAME_AUTH"],
+            "USER": os.environ["DB_USER_AUTH"],
+            "PASSWORD": os.environ["DB_PASSWORD_AUTH"],
             "HOST": os.environ["DB_HOST"],
             "PORT": "3306",
             "OPTIONS": mysql_options,
@@ -124,29 +124,23 @@ if not DEBUG:
 USE_INTERNAL_SERVICE_API = env.bool("USE_INTERNAL_SERVICE_API", default=False)
 AUTH_INTERNAL_BASE_URL = env("AUTH_INTERNAL_BASE_URL", default="")
 EVENTS_INTERNAL_BASE_URL = env("EVENTS_INTERNAL_BASE_URL", default="")
-CORE_INTERNAL_BASE_URL = env("CORE_INTERNAL_BASE_URL", default="")
+POSTS_INTERNAL_BASE_URL = env("POSTS_INTERNAL_BASE_URL", default="")
 
 # 8-2. API Gateway auth handoff
 GATEWAY_USER_ID_HEADER = env("GATEWAY_USER_ID_HEADER", default="X-User-Id")
 
-# 9. JWT 설정 (수동 구현용 변수)
-# Auth service로 이동하여 현재 API에서는 직접 사용하지 않음(참고용 유지)
-# SimpleJWT 설정은 제거하고, 직접 구현 시 사용할 알고리즘/만료시간만 환경변수나 상수로 관리 추천
-# JWT_ALGORITHM = 'HS256'
-# JWT_EXP_DELTA_SECONDS = env.int('JWT_EXP_DELTA_SECONDS', default= 60 * 30)
-
-# 10. 정적파일경로설정
+# 9. 정적파일경로설정
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# 11. ALB사용 시 리다이렉션 오류 방지
+# 10. ALB사용 시 리다이렉션 오류 방지
 # ALB가 전달해준 원래 호스트 정보를 신뢰합니다.
 USE_X_FORWARDED_HOST = True
 
 
-# 12. AWS S3 (Presigned Upload)
+# 11. AWS S3 (Presigned Upload)
 AWS_REGION = env("AWS_REGION", default=env("AWS_DEFAULT_REGION", default="ap-northeast-2"))
 
-# 12-1. bucket 키는 여러 이름 fallback 지원
+# 11-1. bucket 키는 여러 이름 fallback 지원
 S3_UPLOAD_BUCKET = env(
     "S3_UPLOAD_BUCKET",
     default=env("AWS_STORAGE_BUCKET_NAME", default=env("S3_BUCKET", default="")),
@@ -157,7 +151,7 @@ S3_PRESIGN_EXPIRES = env.int("S3_PRESIGN_EXPIRES", default=300)
 
 S3_PUBLIC_BASE_URL = env("S3_PUBLIC_BASE_URL", default=None)
 
-# 13. Notification/Outbox Worker Settings
+# 12. Notification/Outbox Worker Settings
 NOTIFICATION_EVENT_BUS_NAME = env("NOTIFICATION_EVENT_BUS_NAME", default="stagelog-notification-bus")
 NOTIFICATION_SQS_QUEUE_URL = env("NOTIFICATION_SQS_QUEUE_URL", default="")
 NOTIFICATION_DDB_TABLE_NAME = env("NOTIFICATION_DDB_TABLE_NAME", default="stagelog-notifications")
@@ -175,20 +169,20 @@ OUTBOX_NOTIFICATION_AGGREGATE_TYPE = env(
 )
 OUTBOX_DATABASES = env.list("OUTBOX_DATABASES", default=["default"])
 
-# 14. Redis (ElastiCache)
+# 13. Redis (ElastiCache)
 REDIS_HOST = env("REDIS_HOST", default="")
 REDIS_PORT = env.int("REDIS_PORT", default=6379)
 REDIS_DB = env.int("REDIS_DB", default=0)
 REDIS_PASSWORD = env("REDIS_PASSWORD", default="")
 REDIS_SSL = env.bool("REDIS_SSL", default=False)
 
-# 15. Auto Ban (IP filter)
+# 14. Auto Ban (IP filter)
 AUTO_BAN_ENABLED = env.bool("AUTO_BAN_ENABLED", default=False)
 AUTO_BAN_LIMIT_WINDOW_SECONDS = env.int("AUTO_BAN_LIMIT_WINDOW_SECONDS", default=60)
 AUTO_BAN_MAX_REQUESTS = env.int("AUTO_BAN_MAX_REQUESTS", default=100)
 AUTO_BAN_BLOCK_TIME_SECONDS = env.int("AUTO_BAN_BLOCK_TIME_SECONDS", default=3600)
 
-# 16. Cache (Redis 공유 / 로컬 fallback)
+# 15. Cache (Redis 공유 / 로컬 fallback)
 if REDIS_HOST:
     redis_auth = ""
     if REDIS_PASSWORD:
