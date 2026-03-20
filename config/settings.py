@@ -137,19 +137,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 USE_X_FORWARDED_HOST = True
 
 
-# 11. AWS S3 (Presigned Upload)
+# 11. AWS
 AWS_REGION = env("AWS_REGION", default=env("AWS_DEFAULT_REGION", default="ap-northeast-2"))
-
-# 11-1. bucket 키는 여러 이름 fallback 지원
-S3_UPLOAD_BUCKET = env(
-    "S3_UPLOAD_BUCKET",
-    default=env("AWS_STORAGE_BUCKET_NAME", default=env("S3_BUCKET", default="")),
-)
-
-S3_UPLOAD_PREFIX = env("S3_UPLOAD_PREFIX", default="uploads/")
-S3_PRESIGN_EXPIRES = env.int("S3_PRESIGN_EXPIRES", default=300)
-
-S3_PUBLIC_BASE_URL = env("S3_PUBLIC_BASE_URL", default=None)
 
 # 12. Outbox publishing
 NOTIFICATION_EVENT_BUS_NAME = env("NOTIFICATION_EVENT_BUS_NAME", default="stagelog-notification-bus")
