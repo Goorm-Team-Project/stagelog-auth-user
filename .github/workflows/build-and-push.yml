@@ -88,3 +88,4 @@ jobs:
           git add .
           git commit -m "update posts image to ${IMAGE_TAG}" || echo "no changes"
           git push origin ${REF} 
+ 
